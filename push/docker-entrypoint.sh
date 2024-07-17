@@ -71,6 +71,8 @@ elif [[ $PUSHROLE == "pub" && \
     /usr/local/bin/push-server-multi configs $PUSHROLE
 fi
 
+rm -rf /etc/push-server/$PUB_TMPL
+rm -rf /etc/push-server/$SUB_TMPL
 
 # start all services; withous changing user
 /usr/local/bin/push-server-multi systemd_start $PUSHROLE
