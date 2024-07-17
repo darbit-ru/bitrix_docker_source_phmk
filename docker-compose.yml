@@ -31,6 +31,9 @@ services:
             - ./logs/push-server:/var/log/push-server
         depends_on:
             - redis
+        ports:
+            - '${INTERFACE}:9010:9010'
+            - '${INTERFACE}:9011:9011'
         restart: unless-stopped
 
     sub:
@@ -42,6 +45,8 @@ services:
             - ./logs/push-server:/var/log/push-server
         depends_on:
             - redis
+        ports:
+            - '${INTERFACE}:8010:8010'
         restart: unless-stopped
 
     web_server:
