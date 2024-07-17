@@ -85,8 +85,6 @@ services:
             - cache:/var/lib/memcached
             - ${SITE_PATH}:/var/www/bitrix
             - /etc/localtime:/etc/localtime/:ro
-            - ./logs/redis:/var/log/redis
-            - ./logs/push-server:/var/log/push-server
         networks:
             - bitrixdock
 
