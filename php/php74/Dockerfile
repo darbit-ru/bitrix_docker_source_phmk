@@ -24,10 +24,11 @@ COPY ./php.ini /etc/php/7.4/cli/conf.d/90-php.ini
 
 COPY ./conf/supervisor/messanger.conf /etc/supervisor/conf.d/messanger.conf
 COPY ./conf/supervisor/worker.conf /etc/supervisor/conf.d/worker.conf
-CMD service supervisor start
+RUN service supervisor start
 
 RUN usermod -u 1000 www-data
 
 WORKDIR "/var/www/bitrix"
 
 EXPOSE 9000
+
