@@ -37,7 +37,7 @@ services:
         restart: unless-stopped
 
     sub:
-        build: pub
+        build: sub
         container_name: ${PROJECT}sub
         environment:
             - PUSHROLE=sub
