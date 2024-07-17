@@ -16,33 +16,33 @@ services:
             - bitrixdock
         restart: unless-stopped
 
-    redis:
-        build: ./redis
-        container_name: ${PROJECT}redis
-        volumes:
-            - ./logs/redis:/var/log/redis
-
-    pub:
-        build: push
-        container_name: ${PROJECT}pub
-        environment:
-            - PUSHROLE=pub
-        volumes:
-            - ./logs/push-server:/var/log/push-server
-        depends_on:
-            - redis
-        restart: unless-stopped
-
-    sub:
-        build: push
-        container_name: ${PROJECT}sub
-        environment:
-            - PUSHROLE=sub
-        volumes:
-            - ./logs/push-server:/var/log/push-server
-        depends_on:
-            - redis
-        restart: unless-stopped
+#    redis:
+#        build: ./redis
+#        container_name: ${PROJECT}redis
+#        volumes:
+#            - ./logs/redis:/var/log/redis
+#
+#    pub:
+#        build: push
+#        container_name: ${PROJECT}pub
+#        environment:
+#            - PUSHROLE=pub
+#        volumes:
+#            - ./logs/push-server:/var/log/push-server
+#        depends_on:
+#            - redis
+#        restart: unless-stopped
+#
+#    sub:
+#        build: push
+#        container_name: ${PROJECT}sub
+#        environment:
+#            - PUSHROLE=sub
+#        volumes:
+#            - ./logs/push-server:/var/log/push-server
+#        depends_on:
+#            - redis
+#        restart: unless-stopped
 
     web_server:
         build: ./${WEB_SERVER_TYPE}
@@ -56,8 +56,8 @@ services:
             - '${INTERFACE}:443:443'
         links:
             - php
-            - pub
-            - sub
+#            - pub
+#            - sub
         networks:
             - bitrixdock
         environment:
