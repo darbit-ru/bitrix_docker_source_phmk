@@ -23,7 +23,7 @@ services:
             - ./logs/redis:/var/log/redis
 
     pub:
-        build: push
+        build: pub
         container_name: ${PROJECT}pub
         environment:
             - PUSHROLE=pub
@@ -37,7 +37,7 @@ services:
         restart: unless-stopped
 
     sub:
-        build: push
+        build: pub
         container_name: ${PROJECT}sub
         environment:
             - PUSHROLE=sub
