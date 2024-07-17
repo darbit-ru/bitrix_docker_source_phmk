@@ -20,6 +20,4 @@ COPY conf/push-server-sub-__PORT__.json /etc/push-server/push-server-sub-__PORT_
 
 RUN chmod 0755 /usr/local/bin/docker-entrypoint.sh
 
-EXPOSE 9010 9011
-
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
