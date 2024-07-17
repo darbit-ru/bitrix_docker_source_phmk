@@ -1,4 +1,4 @@
-FROM nginx:1.20.2
+FROM nginx:1.27.0
 
 RUN apt-get update \
     && apt-get -y install cron \
