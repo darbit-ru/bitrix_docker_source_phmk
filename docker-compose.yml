@@ -23,7 +23,7 @@ services:
             - ./logs/redis:/var/log/redis
 
     pub:
-        build: pub
+        build: push
         container_name: ${PROJECT}pub
         environment:
             - PUSHROLE=pub
@@ -31,13 +31,10 @@ services:
             - ./logs/push-server:/var/log/push-server
         depends_on:
             - redis
-        ports:
-            - '${INTERFACE}:9010:9010'
-            - '${INTERFACE}:9011:9011'
         restart: unless-stopped
 
     sub:
-        build: sub
+        build: push
         container_name: ${PROJECT}sub
         environment:
             - PUSHROLE=sub
@@ -45,8 +42,6 @@ services:
             - ./logs/push-server:/var/log/push-server
         depends_on:
             - redis
-        ports:
-            - '${INTERFACE}:8010:8010'
         restart: unless-stopped
 
     web_server:
