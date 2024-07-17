@@ -1,20 +1,20 @@
 ---
 services:
-#    php:
-#        build: ./php/${PHP_VERSION}
-#        container_name: ${PROJECT}php
-#        volumes_from:
-#            - source
-#        links:
-#            - db
-#            - memcached
-#        environment:
-#            TZ: Aisa/Almaty
-#        stdin_open: true
-#        tty: true
-#        networks:
-#            - bitrixdock
-#        restart: unless-stopped
+    php:
+        build: ./php/${PHP_VERSION}
+        container_name: ${PROJECT}php
+        volumes_from:
+            - source
+        links:
+            - db
+            - memcached
+        environment:
+            TZ: Aisa/Almaty
+        stdin_open: true
+        tty: true
+        networks:
+            - bitrixdock
+        restart: unless-stopped
 
     redis:
         build: ./redis
