@@ -21,6 +21,8 @@ services:
         container_name: ${PROJECT}redis
         volumes:
             - ./logs/redis:/var/log/redis
+        ports:
+            - '${INTERFACE}:6379:6379'
 
     pub:
         build: pub
