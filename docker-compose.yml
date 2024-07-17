@@ -29,9 +29,6 @@ services:
             - PUSHROLE=pub
         volumes:
             - ./logs/push-server:/var/log/push-server
-        ports:
-            - '${INTERFACE}:9010:9010'
-            - '${INTERFACE}:9011:9011'
         depends_on:
             - redis
         restart: unless-stopped
@@ -43,8 +40,6 @@ services:
             - PUSHROLE=sub
         volumes:
             - ./logs/push-server:/var/log/push-server
-        ports:
-            - '${INTERFACE}:8010:8010'
         depends_on:
             - redis
         restart: unless-stopped
@@ -61,6 +56,8 @@ services:
             - '${INTERFACE}:443:443'
         links:
             - php
+            - pub
+            - sub
         networks:
             - bitrixdock
         environment:
@@ -69,42 +66,42 @@ services:
         tty: true
         restart: unless-stopped
 
-#    db:
-#        build: ./${DB_SERVER_TYPE}
-#        container_name: ${PROJECT}db
-#        volumes:
-#            - ./${DB_SERVER_TYPE}/init:/docker-entrypoint-initdb.d
-#        volumes_from:
-#            - source
-#        ports:
-#            - '${INTERFACE}:3306:3306'
-#        environment:
-#            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-#            MYSQL_DATABASE: ${MYSQL_DATABASE}
-#            MYSQL_USER: ${MYSQL_USER}
-#            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-#            TZ: Aisa/Almaty
-#        command: ["--default-authentication-plugin=mysql_native_password", "--sql_mode="]
-#        networks:
-#            - bitrixdock
-#        stdin_open: true
-#        tty: true
-#        restart: unless-stopped
-#
-#    memcached:
-#        image: memcached:latest
-#        container_name: ${PROJECT}memcached
-#        volumes_from:
-#            - source
-#        ports:
-#            - '${INTERFACE}:11211:11211'
-#        networks:
-#            - bitrixdock
-#        environment:
-#            TZ: Aisa/Almaty
-#        stdin_open: true
-#        tty: true
-#        restart: unless-stopped
+    db:
+        build: ./${DB_SERVER_TYPE}
+        container_name: ${PROJECT}db
+        volumes:
+            - ./${DB_SERVER_TYPE}/init:/docker-entrypoint-initdb.d
+        volumes_from:
+            - source
+        ports:
+            - '${INTERFACE}:3306:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            TZ: Aisa/Almaty
+        command: ["--default-authentication-plugin=mysql_native_password", "--sql_mode="]
+        networks:
+            - bitrixdock
+        stdin_open: true
+        tty: true
+        restart: unless-stopped
+
+    memcached:
+        image: memcached:latest
+        container_name: ${PROJECT}memcached
+        volumes_from:
+            - source
+        ports:
+            - '${INTERFACE}:11211:11211'
+        networks:
+            - bitrixdock
+        environment:
+            TZ: Aisa/Almaty
+        stdin_open: true
+        tty: true
+        restart: unless-stopped
 
     source:
         image: alpine:latest
