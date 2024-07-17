@@ -19,16 +19,16 @@ services:
     redis:
         build: ./redis
         container_name: ${PROJECT}redis
-        volumes_from:
-            - source
+        volumes:
+            - ./logs/redis:/var/log/redis
 
     pub:
         build: pub
         container_name: ${PROJECT}pub
         environment:
             - PUSHROLE=pub
-        volumes_from:
-            - source
+        volumes:
+            - ./logs/push-server:/var/log/push-server
         depends_on:
             - redis
         restart: unless-stopped
@@ -38,8 +38,8 @@ services:
         container_name: ${PROJECT}sub
         environment:
             - PUSHROLE=sub
-        volumes_from:
-            - source
+        volumes:
+            - ./logs/push-server:/var/log/push-server
         depends_on:
             - redis
         restart: unless-stopped
@@ -113,8 +113,6 @@ services:
             - cache:/var/lib/memcached
             - ${SITE_PATH}:/var/www/bitrix
             - /etc/localtime:/etc/localtime/:ro
-            - ./logs/redis:/var/log/redis
-            - ./logs/push-server:/var/log/push-server
         networks:
             - bitrixdock
 
