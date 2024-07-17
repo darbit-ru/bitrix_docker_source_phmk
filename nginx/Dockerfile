@@ -19,4 +19,4 @@ RUN usermod -u 1000 www-data
 
 CMD ["nginx"]
 
-EXPOSE 80 443 8010 9010 9011
+EXPOSE 80 443
