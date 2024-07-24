@@ -1,23 +1,11 @@
-# push/Dockerfile
-FROM node:10
-
-VOLUME /var/log/push-server
-
-RUN mkdir -p /opt/push-server
-
-ADD https://repos.1c-bitrix.ru/yum-testing/push-server-2.0.8.tar.gz /opt/push-server/push-server.tar.gz
+FROM darbit/bitrix-push-server:v2.0
 
 WORKDIR /opt/push-server
 
-RUN tar xzvvf push-server.tar.gz && \
-    rm -f push-server.tar.gz
+EXPOSE 9099
 
-RUN npm install --production
+COPY push_config.toml .
 
-COPY docker-entrypoint.sh /usr/local/bin/
-COPY conf/push-server-pub-__PORT__.json /etc/push-server/push-server-pub-__PORT__.json
-COPY conf/push-server-sub-__PORT__.json /etc/push-server/push-server-sub-__PORT__.json
+ENV CONFIG_FILE=/opt/push-server/push_config.toml
 
-RUN chmod 0755 /usr/local/bin/docker-entrypoint.sh
-
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["push-server"]

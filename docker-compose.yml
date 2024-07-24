@@ -1,4 +1,4 @@
----
+
 services:
     php:
         build: ./php/${PHP_VERSION}
@@ -16,39 +16,23 @@ services:
             - bitrixdock
         restart: unless-stopped
 
-#    redis:
-#        build: ./redis
-#        container_name: ${PROJECT}redis
-#        volumes:
-#            - ./logs/redis:/var/log/redis
-#
-#    pub:
-#        build: push
-#        container_name: ${PROJECT}pub
-#        environment:
-#            - PUSHROLE=pub
-#        volumes:
-#            - ./logs/push-server:/var/log/push-server
-#        depends_on:
-#            - redis
-#        restart: unless-stopped
-#
-#    sub:
-#        build: push
-#        container_name: ${PROJECT}sub
-#        environment:
-#            - PUSHROLE=sub
-#        volumes:
-#            - ./logs/push-server:/var/log/push-server
-#        depends_on:
-#            - redis
-#        restart: unless-stopped
+    push:
+        build: push
+        container_name: ${PROJECT}push
+        environment:
+            - PUSH_SERVER_KEY=${PUSH_SERVER_KEY}
+        volumes_from:
+            - source
+        networks:
+            - bitrixdock
+        restart: unless-stopped
 
     web_server:
         build: ./${WEB_SERVER_TYPE}
         container_name: ${PROJECT}web_server
         depends_on:
             - source
+            - push
         volumes_from:
             - source
         ports:
@@ -56,8 +40,7 @@ services:
             - '${INTERFACE}:443:443'
         links:
             - php
-#            - pub
-#            - sub
+            - push
         networks:
             - bitrixdock
         environment:
@@ -115,6 +98,7 @@ services:
             - cache:/var/lib/memcached
             - ${SITE_PATH}:/var/www/bitrix
             - /etc/localtime:/etc/localtime/:ro
+            - ./logs/push-server:/var/log/push-server
         networks:
             - bitrixdock
 
@@ -126,3 +110,4 @@ volumes:
 
 networks:
     bitrixdock:
+        enable_ipv6: false
