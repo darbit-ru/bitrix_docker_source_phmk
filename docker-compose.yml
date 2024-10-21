@@ -9,7 +9,7 @@ services:
             - db
             - memcached
         environment:
-            TZ: Asia/Almaty
+            TZ: Asia/Aqtobe
         stdin_open: true
         tty: true
         networks:
@@ -20,7 +20,8 @@ services:
         build: push
         container_name: ${PROJECT}push
         environment:
-            - PUSH_SERVER_KEY=${PUSH_SERVER_KEY}
+            PUSH_SERVER_KEY: ${PUSH_SERVER_KEY}
+            TZ: Asia/Aqtobe
         volumes_from:
             - source
         networks:
@@ -44,9 +45,25 @@ services:
         networks:
             - bitrixdock
         environment:
-            TZ: Asia/Almaty
+            TZ: Asia/Aqtobe
         stdin_open: true
         tty: true
+        restart: unless-stopped
+
+    supervisord:
+        build: supervisord
+        container_name: ${PROJECT}supervisord
+        depends_on:
+            - source
+            - php
+        volumes_from:
+            - source
+        links:
+            - php
+        networks:
+            - bitrixdock
+        environment:
+            TZ: Asia/Aqtobe
         restart: unless-stopped
 
     db:
@@ -63,7 +80,7 @@ services:
             MYSQL_DATABASE: ${MYSQL_DATABASE}
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-            TZ: Asia/Almaty
+            TZ: Asia/Aqtobe
         command: ["--default-authentication-plugin=mysql_native_password", "--sql_mode="]
         networks:
             - bitrixdock
@@ -81,7 +98,7 @@ services:
         networks:
             - bitrixdock
         environment:
-            TZ: Asia/Almaty
+            TZ: Asia/Aqtobe
         stdin_open: true
         tty: true
         restart: unless-stopped
@@ -94,11 +111,15 @@ services:
             - ./logs/php:/var/log/php
             - ./logs/db:/var/log/mysql
             - ./logs/memcached:/var/log/memcached
+            - ./logs/supervisord:/var/log/supervisor
             - db:/var/lib/mysql
             - cache:/var/lib/memcached
             - ${SITE_PATH}:/var/www/bitrix
             - /etc/localtime:/etc/localtime/:ro
             - ./logs/push-server:/var/log/push-server
+            - ./nginx/letsencrypt:/etc/letsencrypt
+            - ./nginx/conf/conf.d:/etc/nginx/conf.d
+            - /var/run/docker.sock:/var/run/docker.sock
         networks:
             - bitrixdock
 
